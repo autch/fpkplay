@@ -1,9 +1,3 @@
-/*
-	* libfpk -- using FPK archive on P/ECE
-	* 	By Yui N., 2003.
-	* http://www.autch.net/
-*/
-
 #include <piece.h>
 #include "music/muslib.h"
 #include <string.h>
@@ -93,9 +87,16 @@ void pceAppProc(int cnt)
 	// fpk を開き損なっていたら
 	if(g_nMusicIndex < 0 && !error_shown)
 	{
-		pceFontSetPos(0, 0); pceFontPrintf("fpkplay.fpk not found.");
-		pceFontSetPos(0, 16); pceFontPrintf("Please put fpkplay.fpk");
-		pceFontSetPos(0, 32); pceFontPrintf("and restart.");
+		pceFontSetPos(0, 0); 
+		pceFontPrintf(
+			"fpkplay.fpkが見つ\n"
+			"からないか、LZSS圧縮に\n"
+			"なっていません。\n"
+			"\n"
+			"終了してfpack -eで作った"
+			"fpkplay.fpkを配置してから"
+			"やり直してください"
+		);
 
 		Refresh();
 
@@ -152,6 +153,8 @@ void pceAppExit()
 {
 	musStopImmediately();
 	fpkCloseArchive();
+	// ホールドのまま終了すると液晶がおかしくなる
+	pceLCDDispStart();
 }
 
 void PrintSelection()
